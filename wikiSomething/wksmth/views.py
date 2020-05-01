@@ -6,4 +6,4 @@ from . models import wikiEntry
 
 def index(request):
 	entry = get_object_or_404(wikiEntry, pk=1)
-	return render(request, 'test.html', {entry.search : entry.search_date})
+	return render(request, 'test.html', {'search': entry.search, 'search_time': entry.search_date})
