@@ -11,7 +11,9 @@ def index(request):
 
 def wiki(request):
 	if request.method == 'POST':
-		wikiEntry(search=request.POST, search_date=timezone.now()).save()
-		return HttpResponse('SUPER YO')
+		new_search = request.POST['index']
+		# Handle request.POST['csrfmiddlewaretoken']
+		wikiEntry(search=new_search, search_date=timezone.now()).save()
+		return HttpResponse('Submitted the search {}'.format(new_search))
 	elif request.method == 'GET':
-		return HttpResponse('YO WTF')
+		return HttpResponse('Can\'t view this page without submitting a form.')
