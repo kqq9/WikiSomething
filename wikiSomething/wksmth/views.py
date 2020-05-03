@@ -7,7 +7,7 @@ import wikipedia
 # Create your views here.
 
 def index(request):
-	entry = get_object_or_404(wikiEntry, pk=1)
+	entry = get_object_or_404(wikiEntry, pk=wikiEntry.objects.last().id)
 	return render(request, 'test.html', {'search': entry.search, 'search_time': entry.search_date})
 
 def wiki(request):
