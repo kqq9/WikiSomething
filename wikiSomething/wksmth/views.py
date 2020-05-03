@@ -14,7 +14,7 @@ def wiki(request):
 	if request.method == 'POST':
 		new_search = request.POST['index']
 		# Handle request.POST['csrfmiddlewaretoken']
-		wikiEntry(search=new_search, search_date=timezone.now()).save()
+		wikiEntry(search=new_search, search_date=timezone.now(), ip_address=request.META['REMOTE_ADDR']).save()
 		try:
 			w = wikipedia.summary(new_search)
 			return render(request, 'test2.html', {'arg1': new_search, 'arg2': w})
