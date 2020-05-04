@@ -9,7 +9,7 @@
     <body>
         <h1>What The Fuck Am I Doing</h1>
         <p>Your latest search was {{ search }} at {{ search_time }}.</p>
-        <form action="\wiki\" method="post">
+        <form action="\wiki\" method="post">{% csrf_token %}
             <label for="index">Enter Wiki Query:</label>
             <input id="index" type="text" name="index">
             <input type="submit" value="WHAM">

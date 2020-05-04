@@ -9,8 +9,12 @@ import wikipedia
 # Create your views here.
 
 def login_view(request):
-	if 'badlogin' in request.META['QUERY_STRING']: # possibly janky
-		return render(request, 'login.html', {'badlogin_msg': 'Invalid username/password.'})
+	if request.method == 'GET' and 'badlogin' in request.GET:
+		msg = {
+			'invalid': 'Invalid username/password.',
+			'noauth': 'Sign in to see that.'
+		}
+		return render(request, 'login.html', {'badlogin_msg': msg.get(request.GET['badlogin'], None)})
 	else:
 		return render(request, 'login.html')
 
@@ -18,8 +22,11 @@ def signup(request):
 	return render(request, 'signup.html')
 
 def entry(request):
-	username = request.POST['username']
-	password = request.POST['password']
+	try:
+		username = request.POST['username']
+		password = request.POST['password']
+	except:
+		return HttpResponseRedirect('/?badlogin=noauth')
 	last_entry = get_object_or_404(wikiEntry, pk=wikiEntry.objects.last().id)
 	if request.POST['action'] == 'login':
 		user = authenticate(request, username=username, password=password)
@@ -37,7 +44,6 @@ def entry(request):
 def wiki(request):
 	if request.method == 'POST':
 		new_search = request.POST['index']
-		# Handle request.POST['csrfmiddlewaretoken']
 		wikiEntry(search=new_search, search_date=timezone.now(), ip_address=request.META['REMOTE_ADDR']).save()
 		try:
 			w = wikipedia.summary(new_search)
@@ -51,6 +57,5 @@ def wiki(request):
 					return HttpResponse('No such article {}; no other results found.'.format(new_search))
 			except:
 				return HttpResponse('No such article {}; no other results found.'.format(new_search))
-		#return HttpResponse('Submitted the search {}'.format(new_search))
 	elif request.method == 'GET':
 		return HttpResponse('Can\'t view this page without submitting a form.')
