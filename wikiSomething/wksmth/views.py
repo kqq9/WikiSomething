@@ -18,19 +18,19 @@ def signup(request):
 	return render(request, 'signup.html')
 
 def entry(request):
-	#entry = get_object_or_404(wikiEntry, pk=wikiEntry.objects.last().id)
 	username = request.POST['username']
 	password = request.POST['password']
+	last_entry = get_object_or_404(wikiEntry, pk=wikiEntry.objects.last().id)
 	if request.POST['action'] == 'login':
 		user = authenticate(request, username=username, password=password)
 		if user:
-			return render(request, 'test.html', {'search': entry.search, 'search_time': entry.search_date})    
+			return render(request, 'test.html', {'search': last_entry.search, 'search_time': last_entry.search_date})    
 		else:
 			return HttpResponseRedirect('/?badlogin')
 	elif request.POST['action'] == 'signup':
 		user = User.objects.create_user(username, password=password)
 		if user:
-			return render(request, 'test.html', {'search': entry.search, 'search_time': entry.search_date})    
+			return render(request, 'test.html', {'search': last_entry.search, 'search_time': last_entry.search_date})    
 		else:
 			return HttpResponse('Couldn\'t sign up')
 
