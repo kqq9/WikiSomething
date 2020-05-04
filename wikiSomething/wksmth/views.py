@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from . models import wikiEntry
 from django.utils import timezone
 from django.contrib.auth import authenticate, login
@@ -9,20 +9,30 @@ import wikipedia
 # Create your views here.
 
 def login_view(request):
-	return render(request, 'login.html')
+	if 'badlogin' in request.META['QUERY_STRING']: # possibly janky
+		return render(request, 'login.html', {'badlogin_msg': 'Invalid username/password.'})
+	else:
+		return render(request, 'login.html')
 
 def signup(request):
-	return HttpResponse('Oh Hello There')
+	return render(request, 'signup.html')
 
 def entry(request):
 	#entry = get_object_or_404(wikiEntry, pk=wikiEntry.objects.last().id)
 	username = request.POST['username']
 	password = request.POST['password']
-	user = authenticate(request, username=username, password=password)
-	if user is not None:
-		return render(request, 'test.html', {'search': entry.search, 'search_time': entry.search_date})    
-	else:
-		return HttpResponse('Failed To Log In')
+	if request.POST['action'] == 'login':
+		user = authenticate(request, username=username, password=password)
+		if user:
+			return render(request, 'test.html', {'search': entry.search, 'search_time': entry.search_date})    
+		else:
+			return HttpResponseRedirect('/?badlogin')
+	elif request.POST['action'] == 'signup':
+		user = User.objects.create_user(username, password=password)
+		if user:
+			return render(request, 'test.html', {'search': entry.search, 'search_time': entry.search_date})    
+		else:
+			return HttpResponse('Couldn\'t sign up')
 
 def wiki(request):
 	if request.method == 'POST':

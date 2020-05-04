@@ -4,22 +4,20 @@
         <meta charset="UTF-8">
         {% load static %}
 		<link rel="stylesheet" type="text/css" href="{% static "style.css" %}" >
-        <title>Login To Hell</title>
+        <title>Sign up for Hell</title>
     </head>
     <body>
-		<h1>Login to continue</h1>
-		<p>{{ badlogin_msg }}</p>
+		<h1>Sign up for Unnamed Project</h1>
         <form action="\entry\" method="post">{% csrf_token %}
-			<input type="hidden" name="action" value="login">
+			<input type="hidden" name="action" value="signup">
             <label for="entry">Enter Username:</label>
             <input id="username" type="text" name="username">
 			<br />
             <label for="entry">Enter Password:</label>
             <input id="password" type="text" name="password">
 			<br />
-            <input type="submit" value="Login">
+            <input type="submit" value="Sign up">
         </form>
-		<p><a href="/signup">Sign up for a new account</a></p>
-		<a href="" onclick="alert(&quot;I&#39;m sorry to hear that.&quot;);">Forgot your password?</a>
+		<p><a href="/">Login to an existing account</a></p>
     </body>
 </html>
