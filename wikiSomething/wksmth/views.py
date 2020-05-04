@@ -11,6 +11,9 @@ import wikipedia
 def login_view(request):
 	return render(request, 'login.html')
 
+def signup(request):
+	return HttpResponse('Oh Hello There')
+
 def entry(request):
 	#entry = get_object_or_404(wikiEntry, pk=wikiEntry.objects.last().id)
 	username = request.POST['username']
