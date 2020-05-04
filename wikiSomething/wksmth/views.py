@@ -2,13 +2,24 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from . models import wikiEntry
 from django.utils import timezone
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 import wikipedia
 
 # Create your views here.
 
-def index(request):
-	entry = get_object_or_404(wikiEntry, pk=wikiEntry.objects.last().id)
-	return render(request, 'test.html', {'search': entry.search, 'search_time': entry.search_date})
+def login_view(request):
+	return render(request, 'login.html')
+
+def entry(request):
+	#entry = get_object_or_404(wikiEntry, pk=wikiEntry.objects.last().id)
+	username = request.POST['username']
+	password = request.POST['password']
+	user = authenticate(request, username=username, password=password)
+	if user is not None:
+		return render(request, 'test.html', {'search': entry.search, 'search_time': entry.search_date})    
+	else:
+		return HttpResponse('Failed To Log In')
 
 def wiki(request):
 	if request.method == 'POST':

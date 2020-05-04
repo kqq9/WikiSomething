@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        {% load static %}
+		<link rel="stylesheet" type="text/css" href="{% static "style.css" %}" >
+        <title>Login To Hell</title>
+    </head>
+    <body>
+        <form action="\entry\" method="post">{% csrf_token %}
+            <label for="entry">Enter Username:</label>
+            <input id="username" type="text" name="username">
+            <label for="entry">Enter Password:</label>
+            <input id="password" type="text" name="password">
+            <input type="submit" value="Login">
+        </form>
+    </body>
+</html>
